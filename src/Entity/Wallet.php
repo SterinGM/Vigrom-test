@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Fresh\DoctrineEnumBundle\Validator\Constraints as DoctrineAssert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\WalletRepository")
@@ -17,7 +18,7 @@ class Wallet
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", unique=true)
      */
     private $userId;
 
@@ -27,7 +28,8 @@ class Wallet
     private $amount;
 
     /**
-     * @ORM\Column(type="string", length=3)
+     * @ORM\Column(type="CurrencyType", length=3)
+     * @DoctrineAssert\Enum(entity="App\DBAL\Types\CurrencyType")
      */
     private $currency;
 
