@@ -13,13 +13,13 @@ class WalletBalance
 {
     /**
      * @var int
-     * @SWG\Property(description="The unique identifier of the wallet.")
+     * @SWG\Property(description="Wallet ID")
      */
     public $walletId;
 
     /**
      * @var string
-     * @SWG\Property(type="string")
+     * @SWG\Property(description="Wallet balance")
      */
     public $balance;
 }
