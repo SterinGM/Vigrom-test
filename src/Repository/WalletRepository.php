@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Transaction;
 use App\Entity\Wallet;
 use App\Service\Wallet\DTO\ChangeBalance;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -27,22 +28,36 @@ class WalletRepository extends ServiceEntityRepository
      */
     public function changeBalance(ChangeBalance $changeBalance, int $amount): void
     {
+        $wallet = $changeBalance->getWallet();
+
         try {
             $this->_em->beginTransaction();
 
-            $q = $this->createQueryBuilder('w')
+            $this->createQueryBuilder('w')
                 ->update(Wallet::class, 'w')
                 ->set('w.amount', 'w.amount + :amount')
                 ->andWhere('w.id = :id')
-                ->setParameter('id', $changeBalance->getWallet()->getId())
+                ->setParameter('id', $wallet)
                 ->setParameter('amount', $amount)
-                ->getQuery();
+                ->getQuery()
+                ->execute();
 
-            $q->execute();
+            $this->_em->refresh($wallet);
 
+            $transaction = new Transaction();
+            $transaction->setWallet($wallet);
+            $transaction->setCurrency($wallet->getCurrency());
+            $transaction->setAmount($amount);
+            $transaction->setBalance($wallet->getAmount());
+            $transaction->setType($changeBalance->getTransaction());
+            $transaction->setReason($changeBalance->getReason());
+
+            $this->_em->persist($transaction);
+
+            $this->_em->flush();
             $this->_em->commit();
         } catch (Exception $exception) {
-            $this->_em->commit();
+            $this->_em->rollback();
         }
     }
 }
