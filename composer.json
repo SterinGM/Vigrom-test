@@ -5,6 +5,7 @@
         "php": "^7.2.5",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "fresh/doctrine-enum-bundle": "~7.0",
         "nelmio/api-doc-bundle": "^3.6",
         "symfony/asset": "5.0.*",
         "symfony/console": "5.0.*",
