@@ -51,6 +51,8 @@ class WalletBalanceFixtures extends Fixture implements DependentFixtureInterface
 
                 try {
                     $this->walletService->changeBalance($changeBalance);
+
+                    $manager->refresh($wallet);
                 } catch (NotEnoughMoney $exception) {
                 }
 
