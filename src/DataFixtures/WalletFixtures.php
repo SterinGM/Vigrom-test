@@ -20,6 +20,8 @@ class WalletFixtures extends Fixture
             $wallet->setCurrency(CurrencyType::getRandomValue());
 
             $manager->persist($wallet);
+
+            $this->addReference('wallet_' . $i, $wallet);
         }
 
         $manager->flush();

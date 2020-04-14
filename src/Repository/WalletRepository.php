@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Wallet;
+use App\Service\Wallet\DTO\ChangeBalance;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 
 /**
  * @method Wallet|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,32 +21,28 @@ class WalletRepository extends ServiceEntityRepository
         parent::__construct($registry, Wallet::class);
     }
 
-    // /**
-    //  * @return Wallet[] Returns an array of Wallet objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @param ChangeBalance $changeBalance
+     * @param int $amount
+     */
+    public function changeBalance(ChangeBalance $changeBalance, int $amount): void
     {
-        return $this->createQueryBuilder('w')
-            ->andWhere('w.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('w.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        try {
+            $this->_em->beginTransaction();
 
-    /*
-    public function findOneBySomeField($value): ?Wallet
-    {
-        return $this->createQueryBuilder('w')
-            ->andWhere('w.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            $q = $this->createQueryBuilder('w')
+                ->update(Wallet::class, 'w')
+                ->set('w.amount', 'w.amount + :amount')
+                ->andWhere('w.id = :id')
+                ->setParameter('id', $changeBalance->getWallet()->getId())
+                ->setParameter('amount', $amount)
+                ->getQuery();
+
+            $q->execute();
+
+            $this->_em->commit();
+        } catch (Exception $exception) {
+            $this->_em->commit();
+        }
     }
-    */
 }

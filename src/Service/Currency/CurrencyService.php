@@ -15,11 +15,7 @@ class CurrencyService implements CurrencyServiceInterface
     /**
      * все расчеты происходят в копейках и центах, как советуют делать при работе с деньгами
      *
-     * @param int $amount
-     * @param string $from
-     * @param string $to
-     *
-     * @return int
+     * @inheritDoc
      */
     public function convertToCurrency(int $amount, string $from, string $to): int
     {
