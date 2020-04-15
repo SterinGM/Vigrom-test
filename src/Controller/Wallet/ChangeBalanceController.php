@@ -118,7 +118,7 @@ class ChangeBalanceController extends AbstractController
         $errors = $this->validator->validate($changeBalance);
 
         if ($errors->count() > 0) {
-            throw new ValidatorException($errors->get(0)->getMessage());
+            throw new ValidatorException($errors->get(0)->getPropertyPath() . ': ' . $errors->get(0)->getMessage());
         }
     }
 }
