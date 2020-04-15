@@ -25,6 +25,8 @@ class WalletRepository extends ServiceEntityRepository
     /**
      * @param ChangeBalance $changeBalance
      * @param int $amount
+     *
+     * @throws Exception
      */
     public function changeBalance(ChangeBalance $changeBalance, int $amount): void
     {
@@ -58,6 +60,8 @@ class WalletRepository extends ServiceEntityRepository
             $this->_em->commit();
         } catch (Exception $exception) {
             $this->_em->rollback();
+
+            throw $exception;
         }
     }
 }

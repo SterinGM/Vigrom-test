@@ -12,6 +12,7 @@ use App\Repository\WalletRepository;
 use App\Service\Currency\CurrencyServiceInterface;
 use App\Service\Wallet\DTO\ChangeBalance;
 use App\Service\Wallet\Exception\NotEnoughMoney;
+use Exception;
 
 class WalletService implements WalletServiceInterface
 {
@@ -39,6 +40,7 @@ class WalletService implements WalletServiceInterface
 
     /**
      * @inheritDoc
+     * @throws Exception
      */
     public function changeBalance(ChangeBalance $changeBalance): void
     {
